@@ -1,0 +1,2 @@
+# RealLoopViewPager
+ViewPager真正的自动循环滑动
