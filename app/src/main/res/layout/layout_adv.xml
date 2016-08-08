@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <!--通过ViewPager父布局来控制ViewPager的大小-->
+    <!--通过ViewPager父布局来控制ViewPager的大小,这样通过计算父类减少ViewPager的多次绘制-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
