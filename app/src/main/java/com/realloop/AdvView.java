@@ -3,6 +3,7 @@ package com.realloop;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -23,11 +24,18 @@ public class AdvView extends LinearLayout{
     private AdvPagerAdapter mAdapter;
     private List<Integer> bannerList = new ArrayList<>();
     private List<ImageView> imgList = new ArrayList<>();
+    private boolean isLoop = true;
+    private int mCurrentPagePosition = 0;
 
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
+                    break;
+            }
         }
     };
 
@@ -59,12 +67,14 @@ public class AdvView extends LinearLayout{
 
         @Override
         public void onPageSelected(int position) {
-
+            calculatePosition(position);
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
+            if (ViewPager.SCROLL_STATE_IDLE == state) {
+                mViewPager.setCurrentItem(mCurrentPagePosition, false);
+            }
         }
     }
 
@@ -99,12 +109,40 @@ public class AdvView extends LinearLayout{
             mAdapter = new AdvPagerAdapter(bannerList, imgList, bannerListener);
             mViewPager.setAdapter(mAdapter);
             mViewPager.setCurrentItem(1);
+
+            autoScroll();
+        }
+    }
+
+    private void autoScroll() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (isLoop) {
+                    SystemClock.sleep(2000);
+                    if (mHandler != null) {
+                        mHandler.sendEmptyMessage(0);
+                    }
+                }
+
+            }
+        }).start();
+    }
+
+    private void calculatePosition(int position) {
+        if(position < 1) {
+            mCurrentPagePosition = bannerList.size() - 2;
+        }else if(position > bannerList.size() - 2) {
+            mCurrentPagePosition = 1;
+        }else {
+            mCurrentPagePosition = position;
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        isLoop = false;
         mHandler = null;
     }
 
