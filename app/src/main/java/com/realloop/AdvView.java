@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class AdvView extends LinearLayout{
     private ViewPager mViewPager;
+    private ScrollPoints mScrollPoints;
     private AdvPagerAdapter mAdapter;
     private List<Integer> bannerList = new ArrayList<>();
     private List<ImageView> imgList = new ArrayList<>();
@@ -54,6 +55,7 @@ public class AdvView extends LinearLayout{
 
     private void initView() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_adv, this);
+        mScrollPoints = (ScrollPoints) view.findViewById(R.id.scrollpoint);
         mViewPager = (ViewPager) view.findViewById(R.id.adv_viewpager);
         mViewPager.addOnPageChangeListener(new OnPageChangeListenerImp());
     }
@@ -68,6 +70,7 @@ public class AdvView extends LinearLayout{
         @Override
         public void onPageSelected(int position) {
             calculatePosition(position);
+            mScrollPoints.changeSelectedPoint(mCurrentPagePosition - 1);
         }
 
         @Override
@@ -105,6 +108,8 @@ public class AdvView extends LinearLayout{
                 ImageView imgView = (ImageView) LayoutInflater.from(getContext()).inflate(R.layout.layout_adv_img, null);
                 imgList.add(imgView);
             }
+
+            mScrollPoints.initPoints(getContext(), list.size(), 0);
 
             mAdapter = new AdvPagerAdapter(bannerList, imgList, bannerListener);
             mViewPager.setAdapter(mAdapter);
