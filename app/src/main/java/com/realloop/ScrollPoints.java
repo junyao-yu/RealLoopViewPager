@@ -14,7 +14,7 @@ import java.util.List;
  * Email：yujunyao@yonglibao.com
  */
 public class ScrollPoints extends LinearLayout {
-    private List<ImageView> points = new ArrayList<ImageView>();
+    private List<ImageView> points = new ArrayList<>();
     private LinearLayout pointBox;
     private int marginWidth = 4; // 点点点之间的距离
     private int unfocusImageID; // 正常情况下图标
