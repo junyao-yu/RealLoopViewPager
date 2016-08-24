@@ -1,8 +1,12 @@
 package com.realloop;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+       // 透明状态栏
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            // Translucent status bar
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+
         List<Integer> list = new ArrayList<>();
         list.add(R.drawable.first);
         list.add(R.drawable.second);
@@ -31,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void backResult() {
                 Toast.makeText(MainActivity.this, "adv item click", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
 
